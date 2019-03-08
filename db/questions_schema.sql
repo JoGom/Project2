@@ -12,5 +12,7 @@ CREATE TABLE questions (
     wrongOne varchar(255) NOT NULL,
     wrongTwo varchar(255) NOT NULL,
     wrongThree varchar(255) NOT NULL,
+    createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY(id)
 );
