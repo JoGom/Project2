@@ -13,4 +13,4 @@ CREATE TABLE questions (
     wrongTwo varchar(255) NOT NULL,
     wrongThree varchar(255) NOT NULL,
 	PRIMARY KEY(id)
-)
+);
