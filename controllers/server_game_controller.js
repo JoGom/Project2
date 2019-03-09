@@ -6,14 +6,14 @@ let qIndex = 0;
 // let player1 = userArr[0];
 // let player2 = userArr[1];
 
-// db.questions.findAll({
-//     where: {
-//         category: "Sports"
-//     },
-// }).then(function (result) {
-//     questionArr = result;
-//     console.log(result);
-// });
+db.questions.findAll({
+    where: {
+        category: "Sports"
+    },
+}).then(function (result) {
+    questionArr = result;
+    console.log(result);
+});
 
 
 module.exports = function (io) {
@@ -42,6 +42,13 @@ module.exports = function (io) {
             }
         });
 
+        socket.on('showQuestion', function (questionNumber) {
+            let question = questionArr[questionNumber];
+        
+            io.emit('question', question);
+                
+        });
+
        
         // socket.emit('news', { hello: 'world' });
         // socket.on('my other event', function (data) {
@@ -49,9 +56,8 @@ module.exports = function (io) {
         // });
 
         socket.on('answerQuestion', function (questionNumber) {
-            question = questionNumber;
-            let totalAnwsers = 0;
-            totalAnwsers + 1;
+            let question = questionArr[questionNumber];
+            totalAnwsers;
     
             if (totalAnwsers == 2) {
                 if (round < 6) {

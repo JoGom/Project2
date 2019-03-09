@@ -6,8 +6,26 @@ var Game = {
     question: 1,
     start: function() {
         Game.ready = true;
-        console.log(Game.players);
-        // Game.showPlayers();
+        socket.on('players', function(allPlayers) {
+            // for(let i = 0; i < allPlayers.length; i++){
+            //     Game.players.push(allPlayers[i]);
+            // }
+            // console.log(Game.players);
+            // console.log(players);
+            Game.players = allPlayers;
+            console.log(Game.players);
+            $(`#player_name`).html(`${Game.players[0].username}`);
+            $("#player1").attr("src",`${Game.players[0].imageURL}`);
+            $(`#player_right_count`).html(`${Game.players[0].score}`);
+            $(`#player2_name`).html(`${Game.players[1].username}`);
+            $("#player2").attr("src",`${Game.players[1].imageURL}`);
+            $(`#player2_right_count`).html(`${Game.players[1].score}`);
+            Game.renderQuestion();
+        });
+        
+    },
+    renderQuestion: function() {
+        socket.emit("showQuestion", Game.question);
     },
     stop: function () {
         Game.ready = false;
@@ -18,25 +36,16 @@ var Game = {
         // $(".game").hide();
         // $(".intro").hide();
         // $(".results").hide();
-    },
-    showPlayers: function() {
-        $(`#player_name`).html(`${Game.players[0].username}`);
-        $("#player1").attr("src",`${Game.players[0].imageURL}`);
-        $(`#player_right_count`).html(`${Game.players[0].score}`);
-        $(`#player2_name`).html(`${Game.players[1].username}`);
-        $("#player2").attr("src",`${Game.players[1].imageURL}`);
-        $(`#player2_right_count`).html(`${Game.players[1].score}`);
     }
+    // showPlayers: function() {
+
+    // }
 }
 
 var Player = {
     id: '',
     userName: '',
     score: 0,
-    join: function () {
-        Game.players.push(this);
-        socket.emit("addPlayer", this);
-    },
     addPoints: function() {
         Player.score = Player.score + 5;
         socket.emit("logPoints", this);
@@ -57,6 +66,10 @@ socket.on('ready', function(ready) {
     }
 });
 
+socket.on('question', function(q) {
+    $(`#question`).html(`${q.question}`);
+});
+
 socket.on('socketID', function(socketid) {
     for(let i = 0; i < Game.players.length; i++){
         if(Game.players[i].id == socketid){
@@ -69,13 +82,7 @@ socket.on('socketID', function(socketid) {
     // Game.players = players;
 });
 
-socket.on('players', function(players) {
-    // for(let i = 0; i < players.length; i++){
-    //     Game.players.push(players[i]);
-    // }
-    // console.log(Game.players);
-    Game.players = players;
-});
+
 
 
 
