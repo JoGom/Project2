@@ -2,9 +2,7 @@ const db = require("../models");
 
 let questionArr;
 let playerArr = [];
-let qIndex = 0;
-// let player1 = userArr[0];
-// let player2 = userArr[1];
+
 
 db.questions.findAll({
     where: {
@@ -35,6 +33,7 @@ module.exports = function (io) {
         };
 
         socket.on('logPoints', function(score) {
+            console.log(score);
             for(let i = 0; i < playerArr.length; i++){
                 if (socket.id == playerArr[i].id){
                     playerArr[i].score = score;
@@ -45,8 +44,16 @@ module.exports = function (io) {
         socket.on('showQuestion', function (questionNumber) {
             let question = questionArr[questionNumber];
         
-            io.emit('question', question);
-                
+            
+            if (questionNumber < 7) {
+                // Move on to the next round
+                io.emit('question', question);
+            } else {
+                // Game over!
+                console.log('Game over!');
+                io.sockets.emit('gameOver', playerArr);
+            }
+
         });
 
        
@@ -71,11 +78,7 @@ module.exports = function (io) {
             }
         });
 
-
-
-
-
-
+    
 
         socket.on('disconnect', function () {
             for(let i = 0; i < playerArr.length; i++){

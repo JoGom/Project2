@@ -30,6 +30,7 @@ var Game = {
     answerQuestion: function(choice) {
         if(choice){
             Player.score = Player.score + 1;
+            Player.addPoints();
         }
         Game.question++;
         console.log(Game.question);
@@ -56,8 +57,7 @@ var Player = {
     userName: '',
     score: 0,
     addPoints: function() {
-        Player.score = Player.score + 5;
-        socket.emit("logPoints", this);
+        socket.emit("logPoints", Player.score);
     },
     deductPoints: function() {
         Player.score = Player.score - 3;
@@ -72,6 +72,19 @@ socket.on('ready', function(ready) {
     } else {
         console.log('1 or more players have left, resetting game...');
         Game.stop();
+    }
+});
+
+socket.on('gameOver', function(data) {
+console.log(data);
+    let highScore = Math.max(data[0].score, data[1].score);
+    let winner;
+    for(let i = 0; i < data.length; i++){
+        if(highScore == data[i].score){
+            // winner = data[i].username;
+            $(`#question`).html(`The winner is: ${data[i].username}`);
+        }
+
     }
 });
 
