@@ -16,10 +16,10 @@ var Game = {
             console.log(Game.players);
             $(`#player_name`).html(`${Game.players[0].username}`);
             $("#player1").attr("src",`${Game.players[0].imageURL}`);
-            $(`#player_right_count`).html(`${Game.players[0].score}`);
+            // $(`#player_right_count`).html(`${Game.players[0].score}`);
             $(`#player2_name`).html(`${Game.players[1].username}`);
             $("#player2").attr("src",`${Game.players[1].imageURL}`);
-            $(`#player2_right_count`).html(`${Game.players[1].score}`);
+            // $(`#player2_right_count`).html(`${Game.players[1].score}`);
             Game.renderQuestion();
         });
         
@@ -82,7 +82,7 @@ console.log(data);
     for(let i = 0; i < data.length; i++){
         if(highScore == data[i].score){
             // winner = data[i].username;
-            $(`#question`).html(`The winner is: ${data[i].username}`);
+            $(`#question`).html(`The winner is: ${data[i].username} with a score of ${data[i].score}`);
             Game.stop();
         }
 
