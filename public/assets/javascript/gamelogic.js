@@ -83,6 +83,7 @@ console.log(data);
         if(highScore == data[i].score){
             // winner = data[i].username;
             $(`#question`).html(`The winner is: ${data[i].username}`);
+            Game.stop();
         }
 
     }
