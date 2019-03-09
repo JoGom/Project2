@@ -27,6 +27,15 @@ var Game = {
     renderQuestion: function() {
         socket.emit("showQuestion", Game.question);
     },
+    answerQuestion: function(choice) {
+        if(choice){
+            Player.score = Player.score + 1;
+        }
+        Game.question++;
+        console.log(Game.question);
+        console.log(Player.score);
+        Game.renderQuestion();
+    },
     stop: function () {
         Game.ready = false;
         Game.question = 1;
@@ -66,10 +75,6 @@ socket.on('ready', function(ready) {
     }
 });
 
-socket.on('question', function(q) {
-    $(`#question`).html(`${q.question}`);
-});
-
 socket.on('socketID', function(socketid) {
     for(let i = 0; i < Game.players.length; i++){
         if(Game.players[i].id == socketid){
@@ -81,6 +86,35 @@ socket.on('socketID', function(socketid) {
     console.log(Game.players);
     // Game.players = players;
 });
+
+socket.on('question', function(q) {
+    $(`#question`).html(`${q.question}`);
+    $(`#answer_a`).html(`${q.answer}`);
+    $(`#answer_b`).html(`${q.wrongOne}`);
+    $(`#answer_c`).html(`${q.wrongTwo}`);
+    $(`#answer_d`).html(`${q.wrongThree}`);
+
+    
+});
+
+$(".submit-answer").on("click", function(event) {
+    event.preventDefault();
+
+    let userGuess = $(`input[name='answerBtn']:checked`).val();
+    console.log(userGuess);
+
+    if(userGuess == "a"){
+        Game.answerQuestion(true);
+    }
+    else{
+        Game.answerQuestion(false);
+    }
+    
+    // socket.emit('answer', userGuess);
+});   
+
+     
+
 
 
 
